@@ -11,11 +11,11 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
     await new Promise((r) => setTimeout(r, 800));
     setIsLoading(false);
-    if (email && password) {
+    if (email === 'admin@cyberlearn.uz' && password === 'cyber2026') {
       setUser(mockUser);
-      return { success: true };
+      return { success: true, role: mockUser.role };
     }
-    return { success: false, error: 'Invalid credentials' };
+    return { success: false, error: 'Email yoki parol noto\'g\'ri' };
   }, []);
 
   const register = useCallback(async (data) => {

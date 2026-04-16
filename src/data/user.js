@@ -2,6 +2,7 @@ export const mockUser = {
   id: 'user-001',
   name: 'Sardor Nazarov',
   email: 'sardor@example.com',
+  role: 'admin',
   avatar: null,
   joinedAt: '2024-01-15',
   streak: 7,

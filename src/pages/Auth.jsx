@@ -64,13 +64,25 @@ export function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  if (user) return <Navigate to="/dashboard" replace />;
+  const searchParams = new URLSearchParams(window.location.search);
+  const returnUrl = searchParams.get('returnUrl');
+
+  if (user) {
+    if (returnUrl) return <Navigate to={returnUrl} replace />;
+    if (user.role === 'admin') return <Navigate to="/admin" replace />;
+    if (user.role === 'instructor') return <Navigate to="/instructor" replace />;
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const onSubmit = async (data) => {
     const result = await login(data.email, data.password);
     if (result.success) {
       toast({ message: 'Muvaffaqiyatli kirdingiz!', type: 'success' });
-      navigate('/dashboard');
+      if (returnUrl) { navigate(returnUrl); return; }
+      const role = result.role || 'student';
+      if (role === 'admin') navigate('/admin');
+      else if (role === 'instructor') navigate('/instructor');
+      else navigate('/dashboard');
     } else {
       toast({ message: result.error || 'Kirish xatosi', type: 'error' });
     }
@@ -156,9 +168,9 @@ export function Login() {
             </form>
 
             <div className="mt-8 pt-8 border-t border-white/10">
-              <p className="text-muted text-xs text-center mb-4 uppercase tracking-wider">
-                Demo uchun istalgan email/parol kiriting
-              </p>
+              <p className="text-muted text-xs text-center mb-1 uppercase tracking-wider">Demo kirish</p>
+              <p className="text-accent/70 text-xs text-center font-mono">admin@cyberlearn.uz</p>
+              <p className="text-accent/70 text-xs text-center font-mono">cyber2026</p>
             </div>
           </div>
         </div>
